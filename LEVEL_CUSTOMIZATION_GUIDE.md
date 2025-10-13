@@ -1,6 +1,6 @@
 # Level Customization Guide
 
-This guide explains how to add, remove, or modify levels in your Connections game.
+This guide explains how to add, remove, or modify levels in your word match game.
 
 ## Understanding the Level Structure
 
@@ -155,7 +155,7 @@ Update specific words in the `words` array, keeping exactly 4 words per category
 1. **Save the JSON file**
 2. **Open or refresh [`index.html`](index.html) in your browser**
 3. **Play through your new/modified levels**
-4. **Check that all connections make logical sense**
+4. **Check that all word groups make logical sense**
 5. **Verify level progression works correctly**
 
 ## JSON Validation
