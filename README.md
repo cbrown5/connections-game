@@ -1,4 +1,4 @@
-# Connections game
+# Word Match game
 
 Emulation of the NYT connection game, implemented in javascript and html. Built with generative AI and the Roo Code AI Agent. 
 
