@@ -38,12 +38,12 @@
         {
           "theme": "Seabird families",
           "words": ["Procellariidae ", "Sulidae", "Laridae", "Spheniscidae"],
-          "difficulty": "hard"
+          "difficulty": "very hard"
         },
         {
           "theme": "Marine mammal taxa",
           "words": ["Phocidae", "Otariidae", "Mysticeti", "Odontoceti"],
-          "difficulty": "very hard"
+          "difficulty": "hard"
         },
         {
           "theme": "Fishery ____",
