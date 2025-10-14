@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Match Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .game-container {
+            max-width: 600px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 0 10px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .level-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .level-display {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .mistakes-counter {
+            font-size: 1rem;
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .game-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .reset-btn, .next-level-btn {
+            padding: 8px 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.2s ease;
+        }
+
+        .reset-btn:hover, .next-level-btn:hover:not(:disabled) {
+            background-color: #2980b9;
+        }
+
+        .next-level-btn {
+            background-color: #002811;
+        }
+
+        .next-level-btn:hover:not(:disabled) {
+            background-color: #229954;
+        }
+
+        .next-level-btn:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+            padding: 10px;
+        }
+
+        .word-button {
+            aspect-ratio: 1.5;
+            border: 2px solid #ddd;
+            background-color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: bold;
+            text-align: center;
+            padding: 8px;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .word-button:hover {
+            border-color: #3498db;
+            background-color: #f8f9fa;
+        }
+
+        .word-button.selected {
+            background-color: #3498db;
+            color: white;
+            border-color: #2980b9;
+        }
+
+        .word-button.correct {
+            background-color: #27ae60;
+            color: white;
+            border-color: #229954;
+            cursor: default;
+        }
+
+        .word-button.shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .category-reveal {
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            text-align: center;
+            font-weight: bold;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        .category-reveal.easy {
+            background-color: #0046FF; /* Green for easy */
+        }
+
+
+        .category-reveal.medium {
+            background-color: #73C8D2; /* Orange for medium */
+        }
+
+        .category-reveal.hard {
+            background-color: #f3cb00; /* Red for hard */
+        }
+
+        .category-reveal.very-hard {
+            background-color: #FF9013; /* Purple for very hard */
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .category-theme {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .category-words {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .controls {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .submit-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            background-color: #c0392b;
+        }
+
+        .submit-btn:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+
+        .message {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            min-height: 30px;
+        }
+
+        .message.success {
+            color: #27ae60;
+        }
+
+        .message.error {
+            color: #e74c3c;
+        }
+
+        .game-over {
+            background-color: #2c3e50;
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .game-over h2 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .game-over p {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .game-over-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .play-again-btn, .next-level-btn-large {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .play-again-btn:hover, .next-level-btn-large:hover:not(:disabled) {
+            background-color: #2980b9;
+        }
+
+        .next-level-btn-large {
+            background-color: #27ae60;
+        }
+
+        .next-level-btn-large:hover:not(:disabled) {
+            background-color: #229954;
+        }
+
+        .next-level-btn-large:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+
+        .level-complete {
+            background-color: #27ae60;
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .level-complete h2 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .level-complete p {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .title {
+                font-size: 2rem;
+            }
+
+            .word-button {
+                font-size: 0.8rem;
+                padding: 6px;
+            }
+
+            .grid-container {
+                gap: 6px;
+                padding: 5px;
+            }
+
+            .game-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <header class="header">
+            <h1 class="title">Word match game</h1>
+            <p class="subtitle">Find groups of four items that share something in common</p>
+        </header>
+
+        <div class="game-info">
+            <div class="level-info">
+                <div class="level-display">Level <span id="currentLevel">1</span>: <span id="levelName">Beginner</span></div>
+                <div class="mistakes-counter">Mistakes: <span id="mistakeCount">0</span>/4</div>
+            </div>
+            <div class="game-controls">
+                <button class="next-level-btn" id="nextLevelBtn" onclick="nextLevel()" disabled>Next Level</button>
+                <button class="reset-btn" onclick="resetGame()">Restart Level</button>
+            </div>
+        </div>
+
+        <div id="categoriesContainer"></div>
+
+        <div class="grid-container" id="gameGrid"></div>
+
+        <div class="controls">
+            <button class="submit-btn" id="submitBtn" onclick="submitGuess()" disabled>Submit</button>
+        </div>
+
+        <div class="message" id="message"></div>
+
+        <div class="level-complete" id="levelComplete" style="display: none;">
+            <h2>Level Complete! 🎉</h2>
+            <p id="levelCompleteMessage"></p>
+            <div class="game-over-buttons">
+                <button class="next-level-btn-large" id="nextLevelBtnLarge" onclick="nextLevel()">Next Level</button>
+                <button class="play-again-btn" onclick="resetGame()">Restart Level</button>
+            </div>
+        </div>
+
+        <div class="game-over" id="gameOver" style="display: none;">
+            <h2>Game Over!</h2>
+            <p id="gameOverMessage"></p>
+            <div class="game-over-buttons">
+                <button class="play-again-btn" onclick="resetGame()">Try Again</button>
+                <button class="reset-btn" onclick="goToLevel(1)">Back to Level 1</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game data - loaded from game-data.json
+        let gameData = null;
+
+        // Game state
+        let currentGame = {
+            currentLevel: 1,
+            categories: [],
+            words: [],
+            selectedWords: [],
+            solvedCategories: [],
+            mistakes: 0,
+            maxMistakes: 4,
+            gameOver: false,
+            levelComplete: false
+        };
+
+        // Load game data from JSON file
+        async function loadGameData() {
+            try {
+                console.log('Attempting to load game data from game-data.json...');
+                const response = await fetch('game-data-forage-fish.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                gameData = await response.json();
+                console.log('Game data loaded successfully:', gameData);
+            } catch (error) {
+                console.error('Error loading game data:', error);
+                console.log('Using fallback game data (embedded copy of game-data.json)...');
+                // Fallback - this should match the content of game-data.json
+                gameData = {
+                    "levels": [
+                        {
+                            "level": 1,
+                            "name": "Warm-up",
+                            "categories": [
+                                {
+                                    "theme": "Shades of Blue",
+                                    "words": ["Steel", "Azure", "Aqua", "Sky"],
+                                    "difficulty": "easy"
+                                },
+                                {
+                                    "theme": "Types of degrees",
+                                    "words": ["Diploma", "Bachelor", "Masters", "Honours"],
+                                    "difficulty": "medium"
+                                },
+                                {
+                                    "theme": "Types of tuna",
+                                    "words": ["Yellowfin", "Bluefin", "Skipjack", "Bigeye"],
+                                    "difficulty": "easy"
+                                },
+                                {
+                                    "theme": "Types of kelp",
+                                    "words": ["Bull", "Giant", "Sugar", "Golden"],
+                                    "difficulty": "hard"
+                                }
+                            ]
+                        },
+                        {
+                            "level": 2,
+                            "name": "Test 1",
+                            "categories": [
+                                {
+                                    "theme": "Types of Pasta",
+                                    "words": ["PENNE", "RIGATONI", "FUSILLI", "FARFALLE"],
+                                    "difficulty": "easy"
+                                },
+                                {
+                                    "theme": "Things That Are Red",
+                                    "words": ["TOMATO", "CHERRY", "FIRE TRUCK", "ROSES"],
+                                    "difficulty": "medium"
+                                },
+                                {
+                                    "theme": "Board Games",
+                                    "words": ["CHESS", "SCRABBLE", "MONOPOLY", "CLUE"],
+                                    "difficulty": "easy"
+                                },
+                                {
+                                    "theme": "Words Starting with 'C'",
+                                    "words": ["CAR", "CASTLE", "COOKIE", "COMPUTER"],
+                                    "difficulty": "hard"
+                                }
+                            ]
+                        }
+                    ]
+                };
+                console.log('Fallback game data loaded:', gameData);
+            }
+        }
+
+        // Initialize game
+        function initGame(levelNumber = null) {
+            if (levelNumber !== null) {
+                currentGame.currentLevel = levelNumber;
+            }
+
+            const currentLevelData = gameData.levels.find(level => level.level === currentGame.currentLevel);
+            if (!currentLevelData) {
+                console.error('Level not found');
+                return;
+            }
+
+            currentGame.categories = [...currentLevelData.categories];
+            currentGame.words = [];
+            currentGame.selectedWords = [];
+            currentGame.solvedCategories = [];
+            currentGame.mistakes = 0;
+            currentGame.gameOver = false;
+            currentGame.levelComplete = false;
+
+            // Flatten all words and shuffle them
+            currentGame.categories.forEach(category => {
+                currentGame.words.push(...category.words);
+            });
+            shuffleArray(currentGame.words);
+
+            updateLevelDisplay();
+            renderGame();
+            updateMistakeCounter();
+            updateNextLevelButton();
+            clearMessage();
+            hideGameOver();
+            hideLevelComplete();
+        }
+
+        // Shuffle array utility
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Render the game grid
+        function renderGame() {
+            const gameGrid = document.getElementById('gameGrid');
+            gameGrid.innerHTML = '';
+
+            // Filter out solved words
+            const availableWords = currentGame.words.filter(word => 
+                !currentGame.solvedCategories.some(cat => cat.words.includes(word))
+            );
+
+            availableWords.forEach(word => {
+                const button = document.createElement('button');
+                button.className = 'word-button';
+                button.textContent = word;
+                button.onclick = () => toggleWordSelection(word);
+                
+                if (currentGame.selectedWords.includes(word)) {
+                    button.classList.add('selected');
+                }
+                
+                gameGrid.appendChild(button);
+            });
+
+            updateSubmitButton();
+        }
+
+        // Toggle word selection
+        function toggleWordSelection(word) {
+            if (currentGame.gameOver) return;
+
+            const index = currentGame.selectedWords.indexOf(word);
+            if (index > -1) {
+                currentGame.selectedWords.splice(index, 1);
+            } else if (currentGame.selectedWords.length < 4) {
+                currentGame.selectedWords.push(word);
+            }
+
+            renderGame();
+        }
+
+        // Update submit button state
+        function updateSubmitButton() {
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = currentGame.selectedWords.length !== 4 || currentGame.gameOver;
+        }
+
+        // Submit guess
+        function submitGuess() {
+            if (currentGame.selectedWords.length !== 4 || currentGame.gameOver) return;
+
+            // Check if selection matches any category
+            const matchedCategory = currentGame.categories.find(category => 
+                category.words.every(word => currentGame.selectedWords.includes(word)) &&
+                currentGame.selectedWords.every(word => category.words.includes(word))
+            );
+
+            if (matchedCategory) {
+                // Correct guess
+                currentGame.solvedCategories.push(matchedCategory);
+                currentGame.selectedWords = [];
+                showCorrectGuess(matchedCategory);
+                
+                // Check if all categories are solved
+                if (currentGame.solvedCategories.length === currentGame.categories.length) {
+                    showLevelComplete();
+                }
+            } else {
+                // Incorrect guess
+                currentGame.mistakes++;
+                currentGame.selectedWords = [];
+                showIncorrectGuess();
+                
+                if (currentGame.mistakes >= currentGame.maxMistakes) {
+                    showGameOver();
+                }
+            }
+
+            updateMistakeCounter();
+            renderGame();
+        }
+
+        // Show correct guess feedback
+        function showCorrectGuess(category) {
+            const container = document.getElementById('categoriesContainer');
+            const categoryDiv = document.createElement('div');
+            // Convert difficulty to CSS class (handle spaces like "very hard" -> "very-hard")
+            const difficultyClass = category.difficulty.replace(/\s+/g, '-');
+            categoryDiv.className = `category-reveal ${difficultyClass}`;
+            categoryDiv.innerHTML = `
+                <div class="category-theme">${category.theme}</div>
+                <div class="category-words">${category.words.join(' • ')}</div>
+            `;
+            container.appendChild(categoryDiv);
+
+            showMessage('Correct!', 'success');
+        }
+
+        // Show incorrect guess feedback
+        function showIncorrectGuess() {
+            // Add shake animation to selected words
+            const buttons = document.querySelectorAll('.word-button.selected');
+            buttons.forEach(button => {
+                button.classList.add('shake');
+                setTimeout(() => button.classList.remove('shake'), 500);
+            });
+
+            const remaining = currentGame.maxMistakes - currentGame.mistakes;
+            if (remaining > 0) {
+                showMessage(`Incorrect. ${remaining} mistake${remaining !== 1 ? 's' : ''} remaining.`, 'error');
+            }
+        }
+
+        // Show level complete
+        function showLevelComplete() {
+            currentGame.levelComplete = true;
+            const levelCompleteDiv = document.getElementById('levelComplete');
+            const messageDiv = document.getElementById('levelCompleteMessage');
+            
+            const isLastLevel = currentGame.currentLevel >= gameData.levels.length;
+            
+            if (isLastLevel) {
+                messageDiv.textContent = `Congratulations! You've completed all ${gameData.levels.length} levels!`;
+                document.getElementById('nextLevelBtnLarge').style.display = 'none';
+            } else {
+                messageDiv.textContent = `You found all matches! Ready for the next challenge?`;
+                document.getElementById('nextLevelBtnLarge').style.display = 'inline-block';
+            }
+            
+            levelCompleteDiv.style.display = 'block';
+            updateNextLevelButton();
+            showMessage('Level Complete! 🎉', 'success');
+        }
+
+        // Show game over
+        function showGameOver() {
+            currentGame.gameOver = true;
+            const gameOverDiv = document.getElementById('gameOver');
+            const messageDiv = document.getElementById('gameOverMessage');
+            
+            messageDiv.textContent = `You used all ${currentGame.maxMistakes} mistakes. The remaining categories were:`;
+            
+            // Show unsolved categories
+            const unsolvedCategories = currentGame.categories.filter(cat => 
+                !currentGame.solvedCategories.includes(cat)
+            );
+            
+            unsolvedCategories.forEach(category => {
+                const categoryDiv = document.createElement('div');
+                // Convert difficulty to CSS class (handle spaces like "very hard" -> "very-hard")
+                const difficultyClass = category.difficulty.replace(/\s+/g, '-');
+                categoryDiv.className = `category-reveal ${difficultyClass}`;
+                categoryDiv.style.marginTop = '10px';
+                categoryDiv.innerHTML = `
+                    <div class="category-theme">${category.theme}</div>
+                    <div class="category-words">${category.words.join(' • ')}</div>
+                `;
+                gameOverDiv.insertBefore(categoryDiv, gameOverDiv.lastElementChild);
+            });
+            
+            gameOverDiv.style.display = 'block';
+        }
+
+        // Hide game over screen
+        function hideGameOver() {
+            const gameOverDiv = document.getElementById('gameOver');
+            // Remove any category reveals that were added during game over
+            const reveals = gameOverDiv.querySelectorAll('.category-reveal');
+            reveals.forEach(reveal => reveal.remove());
+            gameOverDiv.style.display = 'none';
+        }
+
+        // Hide level complete screen
+        function hideLevelComplete() {
+            document.getElementById('levelComplete').style.display = 'none';
+        }
+
+        // Update level display
+        function updateLevelDisplay() {
+            const currentLevelData = gameData.levels.find(level => level.level === currentGame.currentLevel);
+            document.getElementById('currentLevel').textContent = currentGame.currentLevel;
+            document.getElementById('levelName').textContent = currentLevelData ? currentLevelData.name : 'Unknown';
+        }
+
+        // Update next level button state
+        function updateNextLevelButton() {
+            const nextLevelBtn = document.getElementById('nextLevelBtn');
+            const isLastLevel = currentGame.currentLevel >= gameData.levels.length;
+            
+            nextLevelBtn.disabled = !currentGame.levelComplete || isLastLevel;
+            
+            if (isLastLevel && currentGame.levelComplete) {
+                nextLevelBtn.textContent = 'All Levels Complete!';
+            } else {
+                nextLevelBtn.textContent = 'Next Level';
+            }
+        }
+
+        // Go to next level
+        function nextLevel() {
+            if (currentGame.currentLevel < gameData.levels.length) {
+                currentGame.currentLevel++;
+                initGame();
+            }
+        }
+
+        // Go to specific level
+        function goToLevel(levelNumber) {
+            initGame(levelNumber);
+        }
+
+        // Update mistake counter
+        function updateMistakeCounter() {
+            document.getElementById('mistakeCount').textContent = currentGame.mistakes;
+        }
+
+        // Show message
+        function showMessage(text, type = '') {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = text;
+            messageDiv.className = `message ${type}`;
+            
+            if (type) {
+                setTimeout(() => {
+                    if (messageDiv.textContent === text) {
+                        clearMessage();
+                    }
+                }, 3000);
+            }
+        }
+
+        // Clear message
+        function clearMessage() {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = '';
+            messageDiv.className = 'message';
+        }
+
+        // Reset game (restart current level)
+        function resetGame() {
+            document.getElementById('categoriesContainer').innerHTML = '';
+            initGame();
+        }
+
+        // Initialize the game when page loads
+        window.onload = async function() {
+            await loadGameData();
+            initGame();
+        };
+    </script>
+</body>
+</html>
