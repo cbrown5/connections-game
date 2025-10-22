@@ -4,7 +4,7 @@ Emulation of the NYT connection game, implemented in javascript and html. Built 
 
 Made as a fun way to quiz my students. See [an example here](https://www.seascapemodels.org/connections-game/). 
 
-This game has multiple levels you play through. See `LEVEL_CUSTOMIZATION_GUIDE.md` for how to modify the data and the levels. Read on below for a version where you can upload your own game data. 
+This game has multiple levels you play through. See `LEVEL_CUSTOMIZATION_GUIDE.md` for how to modify the data and the levels. Read on below for a version where you can upload your own game data directly to the webpage. 
 
 ## Using the Game
 
