@@ -6,9 +6,13 @@ Made as a fun way to quiz my students. See [an example here](https://www.seascap
 
 This game has multiple levels you play through. See `LEVEL_CUSTOMIZATION_GUIDE.md` for how to modify the data and the levels. 
 
-## New Feature: Upload Custom Game Data 🎉
+## Upload Custom Game Data 
 
-You can now **drag and drop your own JSON data file** directly into the browser to create custom puzzles! No need to modify files - just prepare your JSON file and drop it onto the game. See `UPLOAD_GUIDE.md` for detailed instructions.
+You can make your own game with minimal coding with a drag and drop interface.
+
+Got to [this version](https://www.seascapemodels.org/connections-game/word-match-upload.html). 
+
+You can then **drag and drop your own JSON data file** directly into the browser to create custom puzzles. No need to modify files - just prepare your JSON file and drop it onto the game. See `UPLOAD_GUIDE.md` for detailed instructions.
 
 ### Quick Start with Custom Data
 1. Open `index.html` in your browser
