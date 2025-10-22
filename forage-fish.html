@@ -323,60 +323,6 @@
             margin-bottom: 20px;
         }
 
-        .upload-zone {
-            border: 2px dashed #3498db;
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 20px;
-            background-color: #f8f9fa;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .upload-zone:hover {
-            background-color: #e8f4f8;
-            border-color: #2980b9;
-        }
-
-        .upload-zone.dragover {
-            background-color: #d4e9f7;
-            border-color: #2980b9;
-            border-width: 3px;
-        }
-
-        .upload-zone p {
-            margin: 5px 0;
-            color: #555;
-        }
-
-        .upload-zone .upload-title {
-            font-weight: bold;
-            color: #2c3e50;
-            font-size: 1.1rem;
-        }
-
-        .upload-zone .upload-hint {
-            font-size: 0.9rem;
-            color: #777;
-        }
-
-        .upload-feedback {
-            text-align: center;
-            margin-bottom: 15px;
-            font-size: 0.95rem;
-            min-height: 20px;
-        }
-
-        .upload-feedback.success {
-            color: #27ae60;
-            font-weight: bold;
-        }
-
-        .upload-feedback.error {
-            color: #e74c3c;
-            font-weight: bold;
-        }
 
         @media (max-width: 600px) {
             .title {
@@ -407,13 +353,6 @@
             <p class="subtitle">Find groups of four items that share something in common</p>
         </header>
 
-        <div class="upload-zone" id="uploadZone">
-            <p class="upload-title">📁 Upload Custom Game Data</p>
-            <p class="upload-hint">Drag and drop a JSON file here or click to browse</p>
-            <input type="file" id="fileInput" accept=".json" style="display: none;">
-        </div>
-
-        <div class="upload-feedback" id="uploadFeedback"></div>
 
         <div class="game-info">
             <div class="level-info">
@@ -546,145 +485,7 @@
             }
         }
 
-        // Validate game data structure
-        function validateGameData(data) {
-            if (!data || typeof data !== 'object') {
-                return { valid: false, error: 'Invalid JSON structure' };
-            }
 
-            if (!Array.isArray(data.levels) || data.levels.length === 0) {
-                return { valid: false, error: 'Missing or empty "levels" array' };
-            }
-
-            for (let i = 0; i < data.levels.length; i++) {
-                const level = data.levels[i];
-                
-                if (typeof level.level !== 'number') {
-                    return { valid: false, error: `Level ${i + 1}: missing or invalid "level" number` };
-                }
-
-                if (typeof level.name !== 'string') {
-                    return { valid: false, error: `Level ${i + 1}: missing or invalid "name"` };
-                }
-
-                if (!Array.isArray(level.categories) || level.categories.length !== 4) {
-                    return { valid: false, error: `Level ${i + 1}: must have exactly 4 categories` };
-                }
-
-                for (let j = 0; j < level.categories.length; j++) {
-                    const category = level.categories[j];
-                    
-                    if (typeof category.theme !== 'string') {
-                        return { valid: false, error: `Level ${i + 1}, Category ${j + 1}: missing or invalid "theme"` };
-                    }
-
-                    if (!Array.isArray(category.words) || category.words.length !== 4) {
-                        return { valid: false, error: `Level ${i + 1}, Category ${j + 1}: must have exactly 4 words` };
-                    }
-
-                    if (!category.words.every(word => typeof word === 'string')) {
-                        return { valid: false, error: `Level ${i + 1}, Category ${j + 1}: all words must be strings` };
-                    }
-                }
-            }
-
-            return { valid: true };
-        }
-
-        // Handle file upload
-        function handleFileUpload(file) {
-            if (!file) return;
-
-            if (!file.name.endsWith('.json')) {
-                showUploadFeedback('Please upload a JSON file', 'error');
-                return;
-            }
-
-            const reader = new FileReader();
-            
-            reader.onload = function(e) {
-                try {
-                    const jsonData = JSON.parse(e.target.result);
-                    const validation = validateGameData(jsonData);
-                    
-                    if (!validation.valid) {
-                        showUploadFeedback(`Invalid game data: ${validation.error}`, 'error');
-                        return;
-                    }
-
-                    // Replace game data with uploaded data
-                    gameData = jsonData;
-                    showUploadFeedback(`Successfully loaded ${gameData.levels.length} level(s)!`, 'success');
-                    
-                    // Reset to level 1 with new data
-                    document.getElementById('categoriesContainer').innerHTML = '';
-                    initGame(1);
-                    
-                } catch (error) {
-                    showUploadFeedback(`Error parsing JSON: ${error.message}`, 'error');
-                }
-            };
-
-            reader.onerror = function() {
-                showUploadFeedback('Error reading file', 'error');
-            };
-
-            reader.readAsText(file);
-        }
-
-        // Show upload feedback
-        function showUploadFeedback(message, type) {
-            const feedbackDiv = document.getElementById('uploadFeedback');
-            feedbackDiv.textContent = message;
-            feedbackDiv.className = `upload-feedback ${type}`;
-            
-            setTimeout(() => {
-                feedbackDiv.textContent = '';
-                feedbackDiv.className = 'upload-feedback';
-            }, 5000);
-        }
-
-        // Setup drag and drop handlers
-        function setupUploadZone() {
-            const uploadZone = document.getElementById('uploadZone');
-            const fileInput = document.getElementById('fileInput');
-
-            // Click to browse
-            uploadZone.addEventListener('click', () => {
-                fileInput.click();
-            });
-
-            // File input change
-            fileInput.addEventListener('change', (e) => {
-                if (e.target.files.length > 0) {
-                    handleFileUpload(e.target.files[0]);
-                }
-            });
-
-            // Drag and drop events
-            uploadZone.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                uploadZone.classList.add('dragover');
-            });
-
-            uploadZone.addEventListener('dragleave', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                uploadZone.classList.remove('dragover');
-            });
-
-            uploadZone.addEventListener('drop', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                uploadZone.classList.remove('dragover');
-                
-                const files = e.dataTransfer.files;
-                if (files.length > 0) {
-                    handleFileUpload(files[0]);
-                }
-            });
-        }
 
         // Initialize game
         function initGame(levelNumber = null) {
@@ -975,7 +776,6 @@
         // Initialize the game when page loads
         window.onload = async function() {
             await loadGameData();
-            setupUploadZone();
             initGame();
         };
     </script>

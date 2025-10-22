@@ -166,38 +166,65 @@ Make sure your JSON is valid:
 - Don't add trailing commas
 - Maintain proper bracket/brace matching
 
-## Example: Complete 5-Level Structure
+## Example: Complete 4-Level Structure
 
 ```json
 {
   "levels": [
     {
       "level": 1,
-      "name": "Beginner",
-      "categories": [...]
+      "name": "Warm-up",
+      "categories": [
+        {
+          "theme": "Shades of Blue",
+          "words": ["Steel", "Azure", "Aqua", "Sky"],
+          "difficulty": "easy"
+        },
+        {
+          "theme": "Types of degree",
+          "words": ["Diploma", "Bachelor", "Masters", "Honours"],
+          "difficulty": "medium"
+        },
+        {
+          "theme": "Things with propellers",
+          "words": ["Plane", "Helicopter", "Ship", "Fan"],
+          "difficulty": "hard"
+        },
+        {
+          "theme": "Tasmanian marsupials",
+          "words": ["Bandicoot", "Bettong", "Pademelon", "Potoroo"],
+          "difficulty": "very hard"
+        }
+      ]
     },
     {
-      "level": 2, 
-      "name": "Intermediate",
-      "categories": [...]
-    },
-    {
-      "level": 3,
-      "name": "Advanced", 
-      "categories": [...]
-    },
-    {
-      "level": 4,
-      "name": "Expert",
-      "categories": [...]
-    },
-    {
-      "level": 5,
-      "name": "Master",
-      "categories": [...]
+      "level": 2,
+      "name": "Test 1",
+      "categories": [
+        {
+          "theme": "Upwelling systems",
+          "words": ["Humbolt", "Bonney", "Benguela", "Somali"],
+          "difficulty": "easy"
+        },
+        {
+          "theme": "Seabird families",
+          "words": ["Procellariidae ", "Sulidae", "Laridae", "Spheniscidae"],
+          "difficulty": "hard"
+        },
+        {
+          "theme": "Marine mammal taxa",
+          "words": ["Phocidae", "Otariidae", "Mysticeti", "Odontoceti"],
+          "difficulty": "very hard"
+        },
+        {
+          "theme": "Fishery ____",
+          "words": ["Management", "Reference points", "Bycatch", "Discards"],
+          "difficulty": "medium"
+        }
+      ]
     }
   ]
 }
 ```
 
-The game will automatically detect and support any number of levels you add to the JSON file!
+The game will automatically detect and support any number of levels you add to the JSON file. 
