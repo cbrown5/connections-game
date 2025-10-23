@@ -1,0 +1,30 @@
+{
+  "levels": [
+    {
+      "level": 1,
+      "name": "Warm-up",
+      "categories": [
+        {
+          "theme": "Sharks",
+          "words": ["Frilled", "White", "Galapagos", "Ghost"],
+          "difficulty": "easy"
+        },
+        {
+          "theme": "Vegetables",
+          "words": ["Pumpkin", "Potato", "Cucumber", "Zucchini"],
+          "difficulty": "medium"
+        },
+        {
+          "theme": "House plants",
+          "words": ["Tarantula", "Fruit salad", "Bird of paradise", "Spider"],
+          "difficulty": "hard"
+        },
+        {
+          "theme": "Party ____",
+          "words": ["Bag", "Hat", "Shirt", "Hard"],
+          "difficulty": "very hard"
+        }
+      ]
+    }
+  ]
+}

@@ -27,9 +27,9 @@ Got to [this version](https://www.seascapemodels.org/connections-game/word-match
 You can then **drag and drop your own JSON data file** directly into the browser to create custom puzzles. No need to modify files - just prepare your JSON file and drop it onto the game. 
 
 ### Quick Start with Custom Data
-1. Create a `game-data.json` file on your computer, e.g. with a text editor. 
+1. Create a `mydata.json` or `mydata.txt` file on your computer, e.g. with a text editor. 
 1. Open `index.html` in your browser
-2. Drag and drop your custom JSON file onto the upload zone
+2. Drag and drop your custom JSON or .txt file onto the upload zone
 3. Play with your custom words and categories!
 
 ### How to make game-data.JSON

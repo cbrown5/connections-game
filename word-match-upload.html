@@ -410,7 +410,7 @@
         <div class="upload-zone" id="uploadZone">
             <p class="upload-title">📁 Upload Custom Game Data</p>
             <p class="upload-hint">Drag and drop a JSON file here or click to browse</p>
-            <input type="file" id="fileInput" accept=".json" style="display: none;">
+            <input type="file" id="fileInput" accept=".json,.txt" style="display: none;">
         </div>
 
         <div class="upload-feedback" id="uploadFeedback"></div>
@@ -595,8 +595,8 @@
         function handleFileUpload(file) {
             if (!file) return;
 
-            if (!file.name.endsWith('.json')) {
-                showUploadFeedback('Please upload a JSON file', 'error');
+            if (!file.name.endsWith('.json') && !file.name.endsWith('.txt')) {
+                showUploadFeedback('Please upload a JSON or TXT file', 'error');
                 return;
             }
 
