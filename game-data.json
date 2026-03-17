@@ -31,23 +31,23 @@
       "name": "Test 1",
       "categories": [
         {
-          "theme": "Upwelling systems",
-          "words": ["Humbolt", "Bonney", "Benguela", "Somali"],
+          "theme": "Types of model predictions",
+          "words": ["Fitted", "Estimate", "Mean", "Expectation"],
           "difficulty": "easy"
         },
         {
-          "theme": "Seabird families",
-          "words": ["Procellariidae ", "Sulidae", "Laridae", "Spheniscidae"],
+          "theme": "Words for units of observation",
+          "words": ["Observation ", "Sample", "Replicate", "Unit"],
           "difficulty": "hard"
         },
         {
-          "theme": "Marine mammal taxa",
-          "words": ["Phocidae", "Otariidae", "Mysticeti", "Odontoceti"],
+          "theme": "Statistical terms that have alternative meanings",
+          "words": ["Mode", "Spread", "Power", "Confidence"],
           "difficulty": "very hard"
         },
         {
-          "theme": "Fishery ____",
-          "words": ["Management", "Reference points", "Bycatch", "Discards"],
+          "theme": "Ways to compare models",
+          "words": ["AIC", "Likelihood ratio", "Deviance", "R-squared"],
           "difficulty": "medium"
         }
       ]
